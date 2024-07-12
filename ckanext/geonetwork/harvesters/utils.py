@@ -2,9 +2,10 @@
 import logging
 #import re
 import urllib
-import urllib2
+# import urllib2
 import zipfile
-from StringIO import StringIO
+# from StringIO import StringIO
+import io
 from lxml import etree
 
 GEONETWORK_V26 = "2.6"
@@ -37,8 +38,8 @@ class GeoNetworkClient(object):
             })
 
             logger.info('Loading MEF for %s', uuid)
-            request = urllib2.Request(url, query)
-            opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(), urllib2.HTTPRedirectHandler())
+            request = urllib.request.Request(url, query)
+            opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(), urllib.request.HTTPRedirectHandler())
 
             response = opener.open(request)  # will get a ZIP file
             content = response.read()
@@ -46,7 +47,7 @@ class GeoNetworkClient(object):
             #logger.info('----> %s', content)
             #print 'RESPONSE ', content
 
-            zdata = StringIO(content)
+            zdata = io.StringIO(content)
             zfile = zipfile.ZipFile(zdata)
 
             xml = None
