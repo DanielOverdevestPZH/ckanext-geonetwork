@@ -80,7 +80,7 @@ class GeoNetworkHarvester(CSWHarvester, SingletonPlugin):
 
             existing_keys = [entry.get('key') for entry in package_dict['extras']]
 
-            for key, value in default_extras.iteritems():
+            for key, value in default_extras.items():
                 log.debug('Processing extra %s', key)
                 if not key in existing_keys or override_extras:
                     # Look for replacement strings
@@ -163,8 +163,10 @@ class GeoNetworkHarvester(CSWHarvester, SingletonPlugin):
                 version = self.source_config.get('version')
                 client = GeoNetworkClient(gn_localized_url, version)
                 cats = client.retrieveMetadataCategories(harvest_object.guid)
+                log.info(':::::::::::::-TOPIC-CATEGORY-::::::::::::: %r ', cats)
             
             for cat in cats:
+                log.info('group_mapping %r', group_mapping.items())
                 groupname = group_mapping[cat]
 
                 printname = groupname if not None else "NONE"
@@ -183,7 +185,8 @@ class GeoNetworkHarvester(CSWHarvester, SingletonPlugin):
                     except NotFound as e:
                         log.warning('Group %s from category %s is not available' % (groupname, cat))
         except Exception as e:
-            log.warning('Error handling groups for metadata %s' % harvest_object.guid)
+            # log.warning('Error handling groups for metadata %s' % harvest_object.guid)
+            log.warning('Error handling groups for metadata %r', e)
 
         return validated_groups
 
