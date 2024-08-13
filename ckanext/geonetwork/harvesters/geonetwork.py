@@ -174,6 +174,7 @@ class GeoNetworkHarvester(CSWHarvester, SingletonPlugin):
 
                 if groupname:
                     try:
+                        log.info('groupname1 %r', groupname)
                         data_dict = {'id': groupname}
                         get_action('group_show')(context, data_dict)
                         #log.info('Group %s found %s' % (groupname, group))
