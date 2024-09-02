@@ -57,7 +57,7 @@ class GeoNetworkClient(object):
             for name in zfile.namelist():
                 #logger.info(' MEF entry: %s', name)
                 #print ' MEF entry: ', name
-                if name == 'metadata.xml':
+                if name == 'info.xml':
                     uncompressed = zfile.read(name)
                     xml = etree.fromstring(uncompressed)
             
@@ -67,10 +67,14 @@ class GeoNetworkClient(object):
         xml = self.retrieveInfo(uuid)
         cats = []
 
-        for cat in xml.iter('{http://www.isotc211.org/2005/gmd}MD_TopicCategoryCode'):
-            cat = cat.text
+        #for cat in xml.iter('{http://www.isotc211.org/2005/gmd}MD_TopicCategoryCode'):
+        #    cat = cat.text
+        #    logger.info('cat %r', cat)
+        #    cats.append(cat)
+
+        for cat in xml.findall('categories/category'):
             logger.info('cat %r', cat)
-            cats.append(cat)
+            cats.append(cat.get('name')) 
 
         return cats
 
