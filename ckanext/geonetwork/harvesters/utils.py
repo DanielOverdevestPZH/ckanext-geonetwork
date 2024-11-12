@@ -32,16 +32,7 @@ class GeoNetworkClient(object):
 
             logger.info('URL %r ', url)
 
-            #headers = {
-            #    "Content-Type": "application/x-www-form-urlencoded",
-            #    "Accept": "text/plain"
-            
-            #query = urllib.parse.urlencode({
-            #    "uuid": uuid
-            #}).encode('utf-8')
-
             request = urllib.request.Request(url, method='GET')
-
             opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(), urllib.request.HTTPRedirectHandler())
 
             response = opener.open(request)  # will get a ZIP file
@@ -57,7 +48,7 @@ class GeoNetworkClient(object):
             for name in zfile.namelist():
                 #logger.info(' MEF entry: %s', name)
                 #print ' MEF entry: ', name
-                if name == 'info.xml':
+                if name == 'metadata.xml':
                     uncompressed = zfile.read(name)
                     xml = etree.fromstring(uncompressed)
             
@@ -67,14 +58,8 @@ class GeoNetworkClient(object):
         xml = self.retrieveInfo(uuid)
         cats = []
 
-        #for cat in xml.iter('{http://www.isotc211.org/2005/gmd}MD_TopicCategoryCode'):
-        #    cat = cat.text
-        #    logger.info('cat %r', cat)
-        #    cats.append(cat)
-
         for cat in xml.findall('categories/category'):
             logger.info('cat %r', cat)
             cats.append(cat.get('name')) 
 
         return cats
-
